@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rei da Várzea</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <dialog id="setup-modal" open>
+        <form id="setup-form">
+            <h2>Crie seu Jogador</h2>
+            <label for="player-name">Seu Nome:</label>
+            <input type="text" id="player-name" required placeholder="Ex: Higor Batista">
+            
+            <label for="player-age">Idade Inicial:</label>
+            <select id="player-age" required>
+                <option value="16">16 Anos</option>
+                <option value="17">17 Anos</option>
+            </select>
+            
+            <label for="player-position">Posição Principal:</label>
+            <select id="player-position" required>
+                <option value="Ponta Esquerda">Ponta Esquerda</option>
+                <option value="Meia Atacante">Meia Atacante (MA)</option>
+                <option value="Centroavante">Centroavante (CA)</option>
+                <option value="Lateral">Lateral</option>
+                <option value="Volante">Volante</option>
+            </select>
+            
+            <button type="submit">Começar a Jornada</button>
+        </form>
+    </dialog>
+
+    <div id="game-container" class="hidden">
+        <header id="hud">
+            <div id="hud-stats">
+                <div id="player-name-display"></div>
+                <div id="stats-bar">
+                    <span>Hab: <b id="stat-skill">5</b></span>
+                    <span>Fama: <b id="stat-fame">0</b></span>
+                    <span>Caos: <b id="stat-chaos">0</b></span>
+                    <span>Grana: R$<b id="stat-money">20</b></span>
+                    <span>Foco: <b id="stat-foco">80</b></span>
+                </div>
+            </div>
+            <div id="hud-buttons">
+                <button id="social-button" title="Abrir InstaVárzea">📘</button>
+            </div>
+        </header>
+
+        <main id="story-area">
+            <p id="story-text">O texto do evento aparece aqui...</p>
+        </main>
+
+        <footer id="choice-area">
+            </footer>
+
+        <div id="minigame-overlay" class="hidden">
+            <h3 id="minigame-title">PÊNALTI!</h3>
+            <div id="goal-area">
+                <div id="keeper"></div>
+                <div id="wall" class="hidden"></div> 
+                <div class="target-spot" data-target="1"></div>
+                <div class="target-spot" data-target="2"></div>
+                <div class="target-spot" data-target="3"></div>
+                <div class="target-spot" data-target="4a"></div>
+                <div class="target-spot" data-target="4b"></div>
+                <div class="target-spot" data-target="5"></div>
+            </div>
+            <p id="minigame-result"></p>
+        </div>
+
+        <div id="dribble-minigame-overlay" class="hidden">
+            <h3 id="dribble-title">DRIBLE!</h3>
+            <div id="dribble-qte-icon">...</div>
+            <p id="dribble-result">Prepare-se...</p>
+            <div id="dribble-buttons">
+                <button class="dribble-btn" data-dir="left">⬅️</button>
+                <button class="dribble-btn" data-dir="up">⬆️</button>
+                <button class="dribble-btn" data-dir="right">➡️</button>
+            </div>
+        </div>
+
+
+        <dialog id="social-modal">
+            <div id="social-header">
+                <h2>InstaVárzea 📘</h2>
+                <button id="social-close-btn">X</button>
+            </div>
+            <div id="follower-counts">
+                </div>
+            <div id="social-feed-content">
+                </div>
+        </dialog>
+
+    </div>
+
+    <script type="module" src="game-engine.js"></script>
+</body>
+</html>
