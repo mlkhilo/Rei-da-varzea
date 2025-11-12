@@ -1,4 +1,3 @@
-// --- BANCO DE DADOS DE POSTS DO INSTAVÁRZEA ---
 export const allSocialPosts = {
     'post_amanda_festa': {
         author: 'Amanda Carolina',
@@ -15,10 +14,19 @@ export const allSocialPosts = {
         body: 'Futebol se resolve no campo. Moleque sortudo. Semana que vem tem troco. 😡',
         likes: 45
     },
-    'post_briga_marcos': {
+    
+    // ** MODIFICAÇÃO: Post antigo da briga substituído pelo novo **
+    'post_briga_marcos_amigos': {
         author: 'Rádio Várzea (Gordão)',
-        body: 'QUEBRAM O PAU! 🥊 [playerName] e Marcos saíram na mão depois do jogo. Os dois foram banidos. Isso é uma VERGONHA!',
-        likes: 120
+        body: 'NEM EM FESTA! 🥊 O "amistoso da paz" entre Amigos do [player.team] e Amigos do CAI terminou em pancadaria! [playerName] e Marcos saíram na mão de novo! INACREDITÁVEL!',
+        likes: 150
+    },
+
+    // NOVO POST DA BRIGA DO AMISTOSO
+    'post_briga_jamaica': {
+        author: 'Rádio Várzea (Gordão)',
+        body: 'QUEBRAM O PAU! 🥊 O amistoso do [player.team] contra o Jamaica Itapê terminou em briga generalizada! [playerName] foi o pivô! VERGONHA!',
+        likes: 130
     },
     'post_djalma_olheiro': {
         author: 'Várzea Itapê (Admin)',
@@ -38,33 +46,58 @@ export const allSocialPosts = {
     'post_final_2div_campeao': {
         author: 'Várzea Itapê (Admin)',
         body: 'CAMPEÃO! 🏆 O [player.team] choca a todos e vence a Final da 2ª Divisão! [playerName] foi o craque do campeonato!',
-        likes: 4500
+        likes: 450
+    },
+    // --- (NOVOS POSTS V7.0) ---
+    'post_cema_anuncio': {
+        author: 'CEMA FC (Oficial)',
+        body: 'REFORÇO DE PESO! 🏆 O [playerPos] [playerName] é o novo contratado do CEMA para a final do Municipal. Bem-vindo, craque!',
+        likes: 320
+    },
+    'post_player_foco_1': {
+        author: '[playerName]', // O nome do jogador será inserido aqui
+        body: 'Focado 100% no próximo jogo. O trabalho não para. 🙏⚽',
+        likes: 150
+    },
+    'post_amanda_apoio_1': {
+        author: 'Amanda Carolina',
+        body: 'Orgulho de ver você calando a boca dos críticos, [playerName]! ❤️',
+        likes: 250
+    },
+    'post_lucas_apoio_1': {
+        author: 'Lucas Lino',
+        body: 'Parabéns pela vitória, [playerName]! Jogou muito. Tamo junto!',
+        likes: 40
     },
     'post_julinha_provoca_1': {
         author: 'Julinha (Bala de Prata)',
-        body: 'Vi o "fenômeno" [playerName] jogar. Meu time (Bala de Prata) ganhava de 5... 🥱 #muitafama #poucotreino',
-        likes: 150
+        body: 'Acharam que iam subir fácil? A final vai ter dona. E não vai ser o [player.team]. 💅',
+        likes: 180
     },
-    'post_julinha_encontro': {
-        author: 'Julinha (Bala de Prata)',
-        body: 'Ok, até que o [playerName] é gatinho pessoalmente. Mas o Bala de Prata ainda é melhor. 😜',
-        likes: 305
-    },
+    // --- (POSTS DA ATUALIZAÇÃO ANTERIOR) ---
     'post_matar_aula_amanda': {
         author: 'Amanda Carolina',
-        body: 'Açaí com o melhor [playerPos] da cidade. Aula de geografia? Não sei o que é isso. 😂',
-        likes: 410
+        body: 'Açaí com o melhor [playerPos] de Itapê... 🤫❤️',
+        likes: 280
     },
     'post_julinha_flerte': {
         author: 'Julinha (Bala de Prata)',
-        body: 'Sábado tem praça com o [playerName]. Parece que alguém vai ficar sem o "jogador" dela... Ops! 🤫',
-        likes: 450
+        body: 'Papo em dia com o [playerName] na praça. Será que ele aguenta a pressão da 1ª Divisão? 😜',
+        likes: 210
     },
     'post_amanda_ciumes': {
         author: 'Amanda Carolina',
-        body: 'Impressionada com a facilidade que certas "torcedoras" têm pra pular de galho em galho. E mais impressionada com quem dá atenção. 🤢',
-        likes: 620
+        body: 'Tem gente que troca um filé por um kibe... 🙄',
+        likes: 150
+    },
+    'post_julinha_provoca_2': {
+        author: 'Julinha (Bala de Prata)',
+        body: 'Jogador que é jogador de verdade não tem dona, tem assessoria. Fica a dica. 😉',
+        likes: 230
+    },
+    'post_amanda_selfie': {
+        author: 'Amanda Carolina',
+        body: 'Selfie no corredor com o [playerPos] mais gato da ETEC! ❤️ Meu jogador!',
+        likes: 350
     }
 };
-
-

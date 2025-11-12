@@ -14,11 +14,7 @@
             <label for="player-name">Seu Nome:</label>
             <input type="text" id="player-name" required placeholder="Ex: Higor Batista">
             
-            <label for="player-age">Idade Inicial:</label>
-            <select id="player-age" required>
-                <option value="16">16 Anos</option>
-                <option value="17">17 Anos</option>
-            </select>
+            <input type="hidden" id="player-age" value="16">
             
             <label for="player-position">Posição Principal:</label>
             <select id="player-position" required>
@@ -38,14 +34,16 @@
             <div id="hud-stats">
                 <div id="player-name-display"></div>
                 <div id="stats-bar">
-                    <span>Hab: <b id="stat-skill">5</b></span>
+                    <span>Habilidade: <b id="stat-skill">5</b></span>
                     <span>Fama: <b id="stat-fame">0</b></span>
                     <span>Caos: <b id="stat-chaos">0</b></span>
-                    <span>Grana: R$<b id="stat-money">20</b></span>
-                    <span>Foco: <b id="stat-foco">80</b></span>
+                    <span>Foco: <b id="stat-focus">50</b></span>
+                    <span>Grana: R$ <b id="stat-money">20</b></span>
+                    <span>Seguidores: <b id="stat-followers">50</b></span>
                 </div>
             </div>
             <div id="hud-buttons">
+                <button id="stats-button" title="Minha Carreira">🏆</button>
                 <button id="social-button" title="Abrir InstaVárzea">📘</button>
             </div>
         </header>
@@ -61,7 +59,7 @@
             <h3 id="minigame-title">PÊNALTI!</h3>
             <div id="goal-area">
                 <div id="keeper"></div>
-                <div id="wall" class="hidden"></div> 
+                <div id="wall" class="hidden"></div>
                 <div class="target-spot" data-target="1"></div>
                 <div class="target-spot" data-target="2"></div>
                 <div class="target-spot" data-target="3"></div>
@@ -72,17 +70,18 @@
             <p id="minigame-result"></p>
         </div>
 
-        <div id="dribble-minigame-overlay" class="hidden">
+        <div id="dribble-overlay" class="hidden">
             <h3 id="dribble-title">DRIBLE!</h3>
-            <div id="dribble-qte-icon">...</div>
+            <div id="dribble-qte-display">
+                <span id="dribble-qte-icon">...</span>
+            </div>
             <p id="dribble-result">Prepare-se...</p>
-            <div id="dribble-buttons">
-                <button class="dribble-btn" data-dir="left">⬅️</button>
-                <button class="dribble-btn" data-dir="up">⬆️</button>
-                <button class="dribble-btn" data-dir="right">➡️</button>
+            <div id="dribble-button-container">
+                <button class="qte-dribble-btn" data-dir="left">⬅️</button>
+                <button class="qte-dribble-btn" data-dir="up">⬆️</button>
+                <button class="qte-dribble-btn" data-dir="right">➡️</button>
             </div>
         </div>
-
 
         <dialog id="social-modal">
             <div id="social-header">
@@ -95,8 +94,20 @@
                 </div>
         </dialog>
 
+        <dialog id="career-modal">
+            <div id="social-header"> <h2>Minha Carreira 🏆</h2>
+                <button id="career-close-btn">X</button>
+            </div>
+            <div id="career-content">
+                </div>
+        </dialog>
+
     </div>
 
-    <script type="module" src="game-engine.js"></script>
+    <script type="module" src="dom-elements.js"></script>
+    <script type="module" src="social-database.js"></script>
+    <script type="module" src="event-database.js"></script>
+    <script type="module" src="event-database-t2.js"></script> 
+    <script type="module" src="game-engine.js"></script> 
 </body>
 </html>

@@ -12,13 +12,21 @@ let player = {
     foco: 80, // Foco (0-100)
     team: "Nenhum",
     followers: 50,
-    metDjalma: false // Controle de loop da história
+    metDjalma: false, // Controle de loop da história
+    flags: {}, // Controle de eventos
+    // NOVAS ESTATÍSTICAS DE CARREIRA
+    gamesPlayed: 0,
+    goals: 0,
+    assists: 0,
+    yellowCards: 0,
+    redCards: 0
 };
 
 let NPCs = { 
     amanda: { followers: 4500, affinity: 0 },
     marcos: { followers: 150 },
     julinha: { followers: 2100, affinity: 0 },
+    lucas: { followers: 80, affinity: 0 }, 
     profCassia: { patience: 100 } 
 };
 
@@ -48,6 +56,13 @@ DOM.setupForm.addEventListener('submit', (e) => {
     player.followers = 50;
     player.foco = 80;
     player.metDjalma = false;
+    player.flags = {}; 
+    // RESET DAS ESTATÍSTICAS DE CARREIRA
+    player.gamesPlayed = 0;
+    player.goals = 0;
+    player.assists = 0;
+    player.yellowCards = 0;
+    player.redCards = 0;
     
     // Reset NPCs
     NPCs.amanda.followers = 4500;
@@ -55,6 +70,8 @@ DOM.setupForm.addEventListener('submit', (e) => {
     NPCs.marcos.followers = 150;
     NPCs.julinha.followers = 2100;
     NPCs.julinha.affinity = 0;
+    NPCs.lucas.followers = 80; 
+    NPCs.lucas.affinity = 0;
     NPCs.profCassia.patience = 100;
     
     socialFeedLog = []; // Limpa o feed
@@ -74,6 +91,7 @@ function showEvent(eventId) {
     if (NPCs.profCassia.patience > 100) NPCs.profCassia.patience = 100;
 
     // Checagem de Game Over da Professora Cássia
+    // ** ISSO PEGA O JOGADOR DE SURPRESA ANTES DO EVENTO CARREGAR **
     if (NPCs.profCassia.patience <= 0) {
         showEvent('GAME_OVER_CASSIA');
         return;
@@ -82,12 +100,19 @@ function showEvent(eventId) {
     const event = gameEvents[eventId];
     if (!event) { console.error(`Evento "${eventId}" não encontrado!`); return; }
 
+    // Roda o onSelect do *próprio evento* (útil para contabilizar jogos)
+    if (event.onSelect) {
+        event.onSelect(player, NPCs);
+    }
+
     // Atualiza o texto substituindo placeholders
     const storyText = event.text
         .replace(/\[playerName\]/g, player.name)
         .replace(/\[player.age\]/g, player.age)
         .replace(/\[playerPos\]/g, player.position)
         .replace(/\[player.team\]/g, player.team)
+        .replace(/\[player.money\]/g, player.money) 
+        .replace(/\[player.foco\]/g, player.foco) 
         .replace(/\[profCassia.patience\]/g, NPCs.profCassia.patience);
     
     DOM.storyTextElement.innerText = storyText;
@@ -95,16 +120,35 @@ function showEvent(eventId) {
 
     // Renderiza as escolhas
     event.choices.forEach(choice => {
+        // Checagem de condição
         if (choice.condition && !choice.condition(player, NPCs)) {
             return; 
+        }
+        
+        // Checagem de flag (para não repetir evento ou pular)
+        // 'requiresFlag' significa: SÓ mostre se a flag existir
+        if (choice.requiresFlag && !player.flags[choice.requiresFlag]) {
+             return;
+        }
+        // 'skipIfFlag' significa: NÃO mostre se a flag existir
+        if (choice.skipIfFlag && player.flags[choice.skipIfFlag]) {
+             return;
         }
 
         const button = document.createElement('button');
         button.classList.add('choice-button');
-        button.innerText = choice.text;
+        
+        // Substitui placeholders nas escolhas
+        button.innerText = choice.text
+            .replace(/\[player.money\]/g, player.money);
+
         
         if (choice.minigame) {
             button.addEventListener('click', () => {
+                // Roda o onSelect da escolha ANTES do minigame (se houver)
+                if (choice.onSelect) {
+                    choice.onSelect(player, NPCs);
+                }
                 startMinigame(
                     choice.minigame.type, 
                     choice.minigame.onSuccess, 
@@ -147,7 +191,8 @@ function updateStats() {
     DOM.statFame.innerText = player.fame;
     DOM.statChaos.innerText = player.chaos;
     DOM.statMoney.innerText = player.money;
-    DOM.statFoco.innerText = player.foco;
+    DOM.statFocus.innerText = player.foco; 
+    DOM.statFollowers.innerText = player.followers; 
 }
 
 
@@ -249,7 +294,7 @@ DOM.dribbleButtons.forEach(button => {
 
         const chosenDir = button.dataset.dir;
         
-        clearTimeout(dribbleQTE_Timeout);
+        clearTimeout(dribbleQTE_Timeout); 
         dribbleQTE_Timeout = null;
         
         DOM.dribbleButtons.forEach(btn => btn.disabled = true);
@@ -310,6 +355,7 @@ DOM.socialCloseBtn.addEventListener('click', () => {
     DOM.socialModal.close();
 });
 
+// ** MODIFICAÇÃO: Lógica do InstaVárzea atualizada para o formato "clicável" **
 function renderSocialFeed() {
     // 1. Atualiza contagem de seguidores
     DOM.followerCountsDisplay.innerHTML = `
@@ -317,7 +363,8 @@ function renderSocialFeed() {
         <span>Amanda: <b id="a-followers">${NPCs.amanda.followers}</b></span>
         <span>Marcos: <b id="m-followers">${NPCs.marcos.followers}</b></span>
         <span>Julinha: <b id="j-followers">${NPCs.julinha.followers}</b></span>
-    `;
+        <span>Lucas: <b id="l-followers">${NPCs.lucas.followers}</b></span>
+    `; 
 
     // 2. Limpa o feed antigo
     DOM.socialFeedContent.innerHTML = '';
@@ -333,20 +380,61 @@ function renderSocialFeed() {
         const postData = allSocialPosts[postId];
         if (postData) {
             // Substitui placeholders nos posts
+            const postAuthor = postData.author.replace(/\[playerName\]/g, player.name); // Para posts do jogador
             const postBody = postData.body
                 .replace(/\[playerName\]/g, player.name)
-                .replace(/\[player.team\]/g, player.team);
+                .replace(/\[player.team\]/g, player.team)
+                .replace(/\[playerPos\]/g, player.position);
 
             const postElement = document.createElement('div');
             postElement.className = 'social-post';
-            postElement.innerHTML = `
-                <div class="post-header">${postData.author}</div>
+
+            const postHeader = document.createElement('div');
+            postHeader.className = 'post-header';
+            postHeader.innerHTML = `${postAuthor} <span>(clique para ver)</span>`;
+
+            const postContentWrapper = document.createElement('div');
+            postContentWrapper.className = 'post-content-wrapper hidden'; // Começa escondido
+            postContentWrapper.innerHTML = `
                 <div class="post-body">${postBody}</div>
                 <div class="post-footer">${postData.likes} curtidas</div>
             `;
+
+            // Adiciona o evento de clique no header
+            postHeader.addEventListener('click', () => {
+                postContentWrapper.classList.toggle('hidden');
+            });
+
+            postElement.appendChild(postHeader);
+            postElement.appendChild(postContentWrapper);
             DOM.socialFeedContent.appendChild(postElement);
         }
     });
 }
 
+// --- FUNÇÕES DO MODAL DE CARREIRA ---
+DOM.statsButton.addEventListener('click', () => {
+    renderCareerStats();
+    DOM.careerModal.showModal();
+});
+DOM.careerCloseBtn.addEventListener('click', () => {
+    DOM.careerModal.close();
+});
 
+// Nova função para renderizar as estatísticas
+function renderCareerStats() {
+    DOM.careerContent.innerHTML = `
+        <h3>Estatísticas de ${player.name}</h3>
+        <p>Time Atual: <strong>${player.team}</strong></p>
+        <ul>
+            <li>Jogos Disputados: <strong>${player.gamesPlayed}</strong></li>
+            <li>Gols: <strong>${player.goals}</strong></li>
+            <li>Assistências: <strong>${player.assists}</strong></li>
+            <li>Cartões Amarelos: <strong>${player.yellowCards}</strong></li>
+            <li>Cartões Vermelhos: <strong>${player.redCards}</strong></li>
+        </ul>
+        <hr>
+        <h3>Histórico de Times</h3>
+        <p>(Em breve...)</p>
+    `;
+}
