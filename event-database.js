@@ -80,7 +80,7 @@ export const gameEvents = {
         ]
     },
     
-    // --- NOVO ROTEADOR DE EVENTOS ESCOLARES 1 (Amanda/Cassia Aleatório) ---
+    // --- ROTEADOR DE EVENTOS ESCOLARES 1 (Amanda/Cassia Aleatório) ---
     'ESCOLA_HUB_EVENTOS_1': {
         text: "Segunda-feira na escola (ETEC). Você está andando pelo corredor, indo para a aula...",
         choices: [
@@ -144,7 +144,7 @@ export const gameEvents = {
         ]
     },
 
-    // --- NOVO ROTEADOR DA PROF. CÁSSIA (Roleta) ---
+    // --- ROTEADOR DA PROF. CÁSSIA (Roleta) ---
     'ESCOLA_CHECK_CASSIA_ROULETTE': {
         text: "Você entra na sala de aula. A Professora Cássia está na frente da classe...",
         choices: [
@@ -214,7 +214,7 @@ export const gameEvents = {
             { text: "Obrigado, professora!", onSelect: (p) => { p.fame += 5; p.foco += 20; }, nextEvent: 'ESCOLA_TARDE_LIVRE' }
         ]
     },
-    // Tarde Livre (Substitui ESCOLA_SEGUNDA)
+    // Tarde Livre
     'ESCOLA_TARDE_LIVRE': { 
         text: "Você tem a tarde livre antes do treino.",
         choices: [
@@ -310,8 +310,8 @@ export const gameEvents = {
             { text: "Pelo menos o time não perdeu... Agora foco no CAI.", nextEvent: 'JOGO_3_CAI_INTRO' } // Pula para a preparação do Jogo 3 (CAI)
         ]
     },
-    
-    // --- NOVO EVENTO REAL: Preparar Mochila ---
+
+    // --- EVENTO REAL: Preparar Mochila ---
     'EVENTO_MOCHILA_PREP': {
         text: "É sábado de manhã, dia de jogo. Você está preparando sua mochila para o jogo contra o N2. Você confere os itens.",
         choices: [
@@ -321,7 +321,7 @@ export const gameEvents = {
         ]
     },
 
-    // --- NOVO JOGO 2: Jogo Fácil (N2) ---
+    // --- JOGO 2: Jogo Fácil (N2) ---
     'JOGO_2_PREP_N2': {
         text: "O próximo jogo é contra o N2. É considerado o time mais fraco do campeonato. O técnico avisa: 'É pra ganhar e ganhar bem. Sem salto alto.'",
         choices: [
@@ -344,7 +344,7 @@ export const gameEvents = {
         ]
     },
 
-
+    
     // --- JOGO 3: Clássico vs CAI ---
     'JOGO_3_CAI_INTRO': {
         text: "No meio do treino, um cara novo aparece. Seu amigo Lucas cochicha: 'Esse é o Marcos, centroavante do CAI. Ele veio ver o treino do rival.'\n\nMarcos te encara e ri.\n\n'Então esse é o [playerName], o [playerPos] 'famosinho'?'",
@@ -394,6 +394,7 @@ export const gameEvents = {
         choices: [
             {
                 text: "Tentar o drible para o gol. (Ousadia)",
+                onSelect: (p) => { p.foco -= 1; }, // Placebo para garantir que o minigame ative
                 unlocksPost: 'post_drible_marcos',
                 minigame: { type: 'drible', onSuccess: 'JOGO_3_RESULTADO_VITORIA_DRIBLE', onFail: 'JOGO_3_EVENTO_CAI_MOMENTO_2' } // Falha leva ao momento 2
             },
@@ -408,7 +409,7 @@ export const gameEvents = {
             {
                 text: "Driblar o Marcos de novo. (Ousadia Pura)",
                 unlocksPost: 'post_drible_marcos',
-                minigame: { type: 'drible', onSuccess: 'JOGO_3_RESULTADO_VITORIA_DRIBLE', onFail: 'JOGO_3_RESULTADO_FALHA_DRIBLE' } 
+                minigame: { type: 'dribble', onSuccess: 'JOGO_3_RESULTADO_VITORIA_DRIBLE', onFail: 'JOGO_3_RESULTADO_FALHA_DRIBLE' } 
             },
             { text: "Proteger a bola e tocar rápido. (Profissional)", onSelect: (p) => { p.skill += 2; }, nextEvent: 'JOGO_3_RESULTADO_EMPATE' },
             { text: "Forçar uma falta dura dele. (Malícia)", onSelect: (p) => { p.chaos += 5; }, nextEvent: 'JOGO_3_RESULTADO_FALTA' }
@@ -502,7 +503,8 @@ export const gameEvents = {
     'BRIGA_VESTIARIO_RESULTADO': {
         text: "Vocês saíram na porrada. A 'Rádio Várzea' filmou tudo. Você foi banido por 2 jogos e perdeu o respeito do técnico.\n\nSeu nível de Caos está perigosamente alto.",
         choices: [
-            { text: "Péssimo. (Pular 2 jogos)", onSelect: (p) => { p.flags.skipJogo4 = true; p.flags.skipJogo5 = true; }, nextEvent: 'JOGO_6_PREP_SEMIFINAL' } // Pula Jogo 4 e 5
+            // ** ATUALIZAÇÃO DE FLAGS: Pula os jogos 4 (Criciúma) e 5 (Boche) **
+            { text: "Péssimo. (Pular 2 jogos)", onSelect: (p) => { p.flags.skipJogo4 = true; p.flags.skipJogo5 = true; }, nextEvent: 'JOGO_6_PREP_AGUIA' } // Pula Jogo 4 e 5
         ]
     },
     
@@ -612,17 +614,63 @@ export const gameEvents = {
     'JOGO_4_RESULTADO_VITORIA': {
         text: "GOL! Você bateu a falta com perfeição! Você calou o Javali e a torcida deles! O time ganha moral e segura a vitória por 1 a 0.",
         choices: [
-            { text: "Que vitória suada!", onSelect: (p) => { p.fame += 15; p.skill += 1; p.goals += 1; }, nextEvent: 'JOGOTREINO_SARAPUI' }
+            { text: "Que vitória suada!", onSelect: (p) => { p.fame += 15; p.skill += 1; p.goals += 1; }, nextEvent: 'HUB_SEMANA_ESCOLAR_3' }
         ]
     },
     'JOGO_4_RESULTADO_DERROTA': {
         text: "Você errou a falta (ou foi expulso/substituído). O time sentiu sua falta. O Criciúma cresceu e fez 1 a 0 no final. Uma derrota amarga.",
         choices: [
-            { text: "Droga...", onSelect: (p) => { p.chaos += 5; }, nextEvent: 'JOGOTREINO_SARAPUI' }
+            { text: "Droga...", onSelect: (p) => { p.chaos += 5; }, nextEvent: 'HUB_SEMANA_ESCOLAR_3' }
         ]
     },
 
-
+    // --- ROTEADOR DE EVENTOS ESCOLARES 3 (Novos Eventos) ---
+    'HUB_SEMANA_ESCOLAR_3': {
+        text: "Outra semana na ETEC. A poeira do clássico contra o Criciúma baixou.",
+        choices: [
+            { text: "(Você vê o 'Nerdola' derrubar os livros...)", nextEvent: 'EVENTO_ZOEIRA_NERD' },
+            { text: "(Você vê o 'Pro-Player do CS' na sala...)", nextEvent: 'EVENTO_RESENHA_CS' },
+            { text: "(Ir para a aula da Professora Cássia...)", nextEvent: 'ESCOLA_CHECK_CASSIA_ROULETTE_3' }
+        ]
+    },
+    'EVENTO_ZOEIRA_NERD': {
+        text: "Você está no corredor. O 'Nerdola' (goleiro do seu time do Interclasse) tropeça e derruba uma pilha de livros. O Capitão do time da ETEC (que te odeia) passa e chuta os livros dele, rindo. 'Olha por onde anda, otário.'",
+        choices: [
+            { text: "Ajudar o Nerdola a pegar os livros. (Disciplina)", onSelect: (p) => { p.foco += 10; p.chaos -= 5; }, nextEvent: 'JOGOTREINO_SARAPUI' },
+            { text: "Rir junto com o Capitão. (Caos/Fama)", onSelect: (p) => { p.chaos += 10; p.fame += 5; }, unlocksPost: 'post_nerd_zoeira', nextEvent: 'JOGOTREINO_SARAPUI' },
+            { text: "Peitar o Capitão. 'Qual foi? Deixa o moleque.' (Caos)", onSelect: (p) => { p.chaos += 15; p.fame += 10; }, nextEvent: 'JOGOTREINO_SARAPUI' }
+        ]
+    },
+    'EVENTO_RESENHA_CS': {
+        text: "Intervalo. O 'Pro-Player do CS' (seu ala do Interclasse) está no celular vendo um replay. 'Caralho, [playerName], olha esse 'clutch' 1v4 que eu fiz ontem na GC. Sou muito bom!'",
+        choices: [
+            { text: "Assistir e elogiar. 'Jogou fino, mano.' (Fama)", onSelect: (p) => { p.foco += 5; p.fame += 5; }, nextEvent: 'JOGOTREINO_SARAPUI' },
+            { text: "Zuar. 'Isso aí é jogo de quem não corre.' (Caos)", onSelect: (p) => { p.chaos += 5; }, nextEvent: 'JOGOTREINO_SARAPUI' },
+            { text: "Ignorar. 'Tenho que focar no treino.' (Foco)", onSelect: (p) => { p.foco += 10; }, nextEvent: 'JOGOTREINO_SARAPUI' }
+        ]
+    },
+    'ESCOLA_CHECK_CASSIA_ROULETTE_3': {
+        text: "Você entra na sala da Professora Cássia...",
+        choices: [
+            {
+                text: "(Ela te chama na mesa dela... 'PROBLEMA!')",
+                condition: (p, N) => N.profCassia.patience <= 60,
+                nextEvent: 'ESCOLA_PROBLEMA_CASSIA_GENERICA_2'
+            },
+            {
+                text: "(Foi uma aula normal.)",
+                nextEvent: 'JOGOTREINO_SARAPUI'
+            }
+        ]
+    },
+    'ESCOLA_PROBLEMA_CASSIA_GENERICA_2': {
+        text: "A Professora Cássia te chama na mesa. '[playerName], sua paciência comigo está em [profCassia.patience]. De novo. Se não melhorar, vou ligar para seus pais.'",
+        choices: [
+            { text: "Desculpe, professora. Vou focar mais.", onSelect: (p, N) => { p.foco += 20; N.profCassia.patience += 10; }, nextEvent: 'JOGOTREINO_SARAPUI' }, 
+            { text: "Tenho que treinar. (Caos)", onSelect: (p, N) => { p.chaos += 5; p.foco -= 5; N.profCassia.patience -= 20; }, nextEvent: 'JOGOTREINO_SARAPUI' }
+        ]
+    },
+    
     // --- Jogo-Treino Sarapuí ---
     'JOGOTREINO_SARAPUI': {
         text: "Seu time ([player.team]) conseguiu um jogo-treino contra o **Meninos da Vila de Sarapuí**, um time respeitado da várzea vizinha, conhecido pela marcação dura. O jogo é uma vitrine para o resto do campeonato.",
@@ -660,23 +708,20 @@ export const gameEvents = {
     },
 
     
-    // --- NOVO ROTEADOR DE EVENTOS ESCOLARES 2 (Pós-Sarapuí) ---
+    // --- ROTEADOR DE EVENTOS ESCOLARES 2 (Pós-Sarapuí) ---
     'HUB_SEMANA_ESCOLAR_2': {
-        text: "Outra semana começa na ETEC. O próximo jogo está se aproximando, mas por enquanto, você tem que lidar com a rotina da escola...",
+        text: "Outra semana começa na ETEC...",
         choices: [
-            // Evento Selfie Amanda
             { 
                 text: "(Amanda te chama no corredor para a selfie...)", 
-                condition: (p, N) => N.amanda.affinity > 20, 
+                condition: (p, N) => N.amanda.affinity > 20 && Math.random() > 0.4, 
                 nextEvent: 'EVENTO_SELFIE_AMANDA' 
             },
-            // Evento Conselho Lucas
             { 
                 text: "(Lucas Lino te para no corredor...)", 
-                condition: (p) => p.fame > 30, 
+                condition: (p) => p.fame > 30 && Math.random() > 0.4, 
                 nextEvent: 'EVENTO_CONSELHO_LUCAS' 
             },
-            // Roteador Cassia
             { 
                 text: "(Você entra na sala da Professora Cássia...)", 
                 nextEvent: 'ESCOLA_CHECK_CASSIA_ROULETTE_2' 
@@ -731,14 +776,14 @@ export const gameEvents = {
             { text: "Obrigado, professora!", onSelect: (p) => { p.fame += 5; p.foco += 20; }, nextEvent: 'JOGO_5_PREP_BOCHE' }
         ]
     },
-    
+
     // --- JOGO 5: Boche FC ---
     'JOGO_5_PREP_BOCHE': {
         text: "Você continua no [player.team]. O próximo jogo é contra o Boche FC (da 2ª Divisão), um time muito sujo e violento. A pressão é alta para classificar.",
         choices: [
             { text: "Vamos pra cima!", skipIfFlag: 'skipJogo5', nextEvent: 'EVENTO_ZUEIRO_CACHORRO' }, 
             { text: "Sua chuteira rasgou. Precisa de uma nova.", condition: (p) => p.money < 50, nextEvent: 'EVENTO_DINHEIRO_CHUTEIRA' },
-            { text: "(SUSPENSO) Assistir o jogo da arquibancada.", requiresFlag: 'skipJogo5', onSelect: (p) => { delete p.flags.skipJogo5; }, nextEvent: 'ESCOLA_INVEJA_2' } 
+            { text: "(SUSPENSO) Assistir o jogo da arquibancada.", requiresFlag: 'skipJogo5', onSelect: (p) => { delete p.flags.skipJogo5; }, nextEvent: 'JOGO_6_PREP_AGUIA' } 
         ]
     },
     'EVENTO_DINHEIRO_CHUTEIRA': { 
@@ -794,126 +839,185 @@ export const gameEvents = {
     'ESCOLA_JULINHA_PROVOCA': { 
         text: "Você está no corredor da ETEC. Julinha (Bala de Prata) te para na frente de todos. 'E aí, [playerName]? Cuidado pra Amanda não te prender na coleira. Ouvi dizer que ela gosta de 'jogador' obediente.'",
         choices: [
-            { text: "Defender Amanda: 'Ela é minha garota.'", onSelect: (p, N) => { N.amanda.affinity += 10; N.julinha.affinity -= 10; }, nextEvent: 'JOGO_6_PREP_SEMIFINAL' },
+            { text: "Defender Amanda: 'Ela é minha garota.'", onSelect: (p, N) => { N.amanda.affinity += 10; N.julinha.affinity -= 10; }, nextEvent: 'EVENTO_JULINHA_NIVER_CONVITE' },
             { text: "Flertar com Julinha: 'E você, gosta de que tipo?'", onSelect: (p, N) => { p.chaos += 10; N.julinha.affinity += 15; N.amanda.affinity -= 10; }, unlocksPost: 'post_julinha_provoca_2', nextEvent: 'ROLO_JULINHA_1' }, 
-            { text: "Ignorar as duas e ir para a aula.", onSelect: (p) => { p.foco += 10; }, nextEvent: 'JOGO_6_PREP_SEMIFINAL' }
+            { text: "Ignorar as duas e ir para a aula.", onSelect: (p) => { p.foco += 10; }, nextEvent: 'EVENTO_JULINHA_NIVER_CONVITE' }
         ]
     },
     'ROLO_JULINHA_1': { 
         text: "Julinha ri. 'Gosto dos que não têm dona.' Ela te manda uma DM mais tarde: 'Sábado à noite, Praça do Coreto. Sozinho. Vamos ver se você é tão bom fora do campo.'",
         choices: [
             { text: "Ir ao encontro de Julinha. (Caos)", onSelect: (p, N) => { p.chaos += 15; p.fame += 10; N.julinha.affinity += 10; p.foco -= 20; }, unlocksPost: 'post_julinha_flerte', nextEvent: 'AMANDA_CONFRONTO_JULINHA' },
-            { text: "Ignorar. Tenho treino no domingo.", onSelect: (p, N) => { p.foco += 20; N.julinha.affinity -= 10; }, nextEvent: 'JOGO_6_PREP_SEMIFINAL' }
+            { text: "Ignorar. Tenho treino no domingo.", onSelect: (p, N) => { p.foco += 20; N.julinha.affinity -= 10; }, nextEvent: 'EVENTO_JULINHA_NIVER_CONVITE' }
         ]
     },
     'AMANDA_CONFRONTO_JULINHA': { 
         text: "Amanda viu o post da Julinha. Ela te encontra na escola, furiosa. 'O que significa aquele post da [playerName] na praça, [playerName]? Você tá de rolo com aquela torcedora de time de segunda?'",
         choices: [
-            { text: "Mentir: 'Ela é louca. Só falei de futebol.'", onSelect: (p, N) => { p.chaos += 5; N.amanda.affinity -= 5; }, nextEvent: 'JOGO_6_PREP_SEMIFINAL' },
-            { text: "Assumir: 'A gente só conversou. Você não é minha dona.'", onSelect: (p, N) => { p.chaos += 20; N.amanda.affinity -= 30; N.julinha.affinity += 10; }, unlocksPost: 'post_amanda_ciumes', nextEvent: 'JOGO_6_PREP_SEMIFINAL' },
-            { text: "Culpar Julinha: 'Ela tá inventando pra ganhar fama.'", onSelect: (p, N) => { N.amanda.affinity += 5; N.julinha.affinity -= 20; }, nextEvent: 'JOGO_6_PREP_SEMIFINAL' }
+            { text: "Mentir: 'Ela é louca. Só falei de futebol.'", onSelect: (p, N) => { p.chaos += 5; N.amanda.affinity -= 5; }, nextEvent: 'EVENTO_JULINHA_NIVER_CONVITE' },
+            { text: "Assumir: 'A gente só conversou. Você não é minha dona.'", onSelect: (p, N) => { p.chaos += 20; N.amanda.affinity -= 30; N.julinha.affinity += 10; }, unlocksPost: 'post_amanda_ciumes', nextEvent: 'EVENTO_JULINHA_NIVER_CONVITE' },
+            { text: "Culpar Julinha: 'Ela tá inventando pra ganhar fama.'", onSelect: (p, N) => { N.amanda.affinity += 5; N.julinha.affinity -= 20; }, nextEvent: 'EVENTO_JULINHA_NIVER_CONVITE' }
         ]
     },
     
-    // --- JOGO 6: Semifinal ---
-    'JOGO_6_PREP_SEMIFINAL': {
+    // --- NOVO ARCO: Aniversário da Julinha ---
+    'EVENTO_JULINHA_NIVER_CONVITE': {
+        text: "É sexta-feira à noite. Seu celular vibra. DM de Julinha: 'Meu niver amanhã. Festinha aqui na chácara do meu pai. Só vai vir a galera do Bala de Prata e da 1ª Divisão. Vai encarar ou vai ficar na coleira da Amanda?'",
+        choices: [
+            { text: "Ir à festa. (Caos/Oportunidade)", onSelect: (p, N) => { p.chaos += 10; p.foco -= 20; N.julinha.affinity += 10; N.amanda.affinity -= 5; }, unlocksPost: 'post_julinha_niver', nextEvent: 'EVENTO_JULINHA_NIVER_FESTA' },
+            { text: "Recusar educadamente. (Foco/Lealdade Amanda)", onSelect: (p, N) => { p.foco += 10; N.julinha.affinity -= 10; N.amanda.affinity += 5; }, nextEvent: 'JOGO_6_PREP_AGUIA' }
+        ]
+    },
+    'EVENTO_JULINHA_NIVER_FESTA': {
+        text: "A chácara está lotada. O som é ensurdecedor. Julinha te vê, sorri e te entrega um copo vermelho. 'Bebe, [playerName]! Hoje é dia de comemorar!' A galera do Bala de Prata te encara feio.",
+        choices: [
+            { text: "Beber e curtir a festa. (Caos)", onSelect: (p) => { p.chaos += 10; p.foco -= 20; }, nextEvent: 'EVENTO_JULINHA_NIVER_OPCOES' },
+            { text: "Ficar só no networking, sem beber. (Fama)", onSelect: (p) => { p.fame += 10; p.foco -= 5; }, nextEvent: 'EVENTO_JULINHA_NIVER_OPCOES' }
+        ]
+    },
+    'EVENTO_JULINHA_NIVER_OPCOES': {
+        text: "Você está no meio da festa. A música está alta. Você vê o capitão do Bala de Prata (o rival da final, caso você chegue lá) te olhando torto.",
+        choices: [
+            { text: "Ir falar com o capitão rival. (Networking/Risco)", onSelect: (p) => { p.fame += 5; p.chaos += 5; }, nextEvent: 'JOGO_6_PREP_AGUIA' },
+            { text: "Puxar Julinha para dançar. (Caos/Romance)", onSelect: (p, N) => { p.chaos += 10; N.julinha.affinity += 15; }, nextEvent: 'EVENTO_JULINHA_NIVER_FICA' },
+            { text: "Beber mais e curtir a piscina. (Caos Total)", onSelect: (p, N) => { p.chaos += 15; p.foco -= 25; N.profCassia.patience -= 10; }, nextEvent: 'JOGO_6_PREP_AGUIA' }
+        ]
+    },
+    'EVENTO_JULINHA_NIVER_FICA': {
+        text: "Você puxa Julinha para dançar. Ela ri. 'Você é rápido, [playerPos]...'\n\nO clima esquenta, mas antes que algo aconteça, o Capitão do Bala de Prata (notoriamente ex dela) vê a cena. 'Ei! Larga ela, [playerName]! Tá achando o que?'",
+        choices: [
+            { text: "Peitar ele. 'Ela não é sua.' (Caos)", onSelect: (p) => { p.chaos += 10; p.fame += 5; }, nextEvent: 'JOGO_6_PREP_AGUIA' },
+            { text: "Sair de fininho. 'Calma, só dançando.' (Foco)", onSelect: (p) => { p.foco += 5; }, nextEvent: 'JOGO_6_PREP_AGUIA' }
+        ]
+    },
+
+    // --- NOVO JOGO 6: Águia Paulista (Assist Lucas) ---
+    'JOGO_6_PREP_AGUIA': {
+        text: "Depois do fim de semana agitado, o foco volta para o campeonato. O próximo jogo é contra o Águia Paulista. Um time rápido, mas que deixa espaços. Lucas Lino parece nervoso, a família dele veio assistir.",
+        choices: [
+            { text: "Vamos pra cima!", skipIfFlag: 'skipJogo6', nextEvent: 'JOGO_6_EVENTO_AGUIA' },
+            { text: "(SUSPENSO) Assistir o jogo da arquibancada.", requiresFlag: 'skipJogo5', onSelect: (p) => { delete p.flags.skipJogo5; }, nextEvent: 'JOGO_7_PREP_SEMIFINAL' } // Pula para a Semifinal
+        ]
+    },
+    'JOGO_6_EVENTO_AGUIA': {
+        text: "Jogo contra o Águia Paulista. 0 a 0, segundo tempo. A zaga deles sai jogando errado e a bola sobra limpa para você na entrada da área. O goleiro sai desesperado.\n\nVocê vê de rabo de olho seu amigo, Lucas Lino, entrando livre na segunda trave.",
+        onSelect: (p) => { p.gamesPlayed += 1; },
+        choices: [
+            { text: "Tocar para o Lucas Lino fazer o gol. (Assistência/Foco)", onSelect: (p, N) => { p.skill += 1; p.foco += 10; p.assists += 1; N.lucas.affinity += 10; }, unlocksPost: 'post_aguia_assist_lucas', nextEvent: 'JOGO_6_RESULTADO_VITORIA' },
+            { text: "Chutar no gol e garantir a fama. (Fama)", onSelect: (p) => { p.goals += 1; p.fame += 5; p.skill += 1; }, nextEvent: 'JOGO_6_RESULTADO_VITORIA' },
+            { text: "Tentar driblar o goleiro e cavar. (Caos)", onSelect: (p) => { p.chaos += 5; }, nextEvent: 'JOGO_6_RESULTADO_EMPATE' }
+        ]
+    },
+    'JOGO_6_RESULTADO_VITORIA': {
+        text: "Gol! O [player.team] vence por 1 a 0! Seja com seu gol ou sua assistência, o time está classificado para a semifinal!",
+        choices: [
+            { text: "Semifinal, aqui vamos nós!", nextEvent: 'JOGO_7_PREP_SEMIFINAL' }
+        ]
+    },
+    'JOGO_6_RESULTADO_EMPATE': {
+        text: "Você tentou o drible e o goleiro pegou. O jogo termina 0 a 0. O técnico fica irritado com sua 'fome de bola'. 'Era só tocar, [playerName]!'",
+        choices: [
+            { text: "Droga...", onSelect: (p) => { p.chaos += 5; }, nextEvent: 'JOGO_7_PREP_SEMIFINAL' }
+        ]
+    },
+
+    // --- JOGO 7: Semifinal (Antigo Jogo 6) ---
+    'JOGO_7_PREP_SEMIFINAL': {
         text: "É a SEMIFINAL do Gramadinho! O [player.team] contra o **Palmeirinha**. O técnico está nervoso.\n\n'Eles têm um zagueiro muito rápido. [playerName], preciso que você jogue inteligente.'",
         choices: [
-            { text: "Ok, técnico. Vou me sacrificar pelo time.", skipIfFlag: 'skipJogo6', onSelect: (p) => { p.skill += 1; p.chaos -= 5; p.foco += 15; }, nextEvent: 'JOGO_6_EVENTO_SEMIFINAL' }, 
-            { text: "Técnico, eu sou [playerPos], meu negócio é gol. (Caos)", skipIfFlag: 'skipJogo6', onSelect: (p) => { p.chaos += 5; p.foco -= 5; }, nextEvent: 'JOGO_6_EVENTO_SEMIFINAL' },
-            { text: "Julinha está na torcida te secando.", skipIfFlag: 'skipJogo6', condition: (p, N) => N.julinha.affinity > 10, nextEvent: 'VARZEA_JULINHA_JOGO' },
-            { text: "(SUSPENSO) Assistir o jogo da arquibancada.", requiresFlag: 'skipJogo6', onSelect: (p) => { delete p.flags.skipJogo6; }, nextEvent: 'JOGO_7_PREP_SUSPENSO' } // Evento de suspensão
+            { text: "Ok, técnico. Vou me sacrificar pelo time.", skipIfFlag: 'skipJogo7', onSelect: (p) => { p.skill += 1; p.chaos -= 5; p.foco += 15; }, nextEvent: 'JOGO_7_EVENTO_SEMIFINAL' }, 
+            { text: "Técnico, eu sou [playerPos], meu negócio é gol. (Caos)", skipIfFlag: 'skipJogo7', onSelect: (p) => { p.chaos += 5; p.foco -= 5; }, nextEvent: 'JOGO_7_EVENTO_SEMIFINAL' },
+            { text: "Julinha está na torcida te secando.", skipIfFlag: 'skipJogo7', condition: (p, N) => N.julinha.affinity > 10, nextEvent: 'VARZEA_JULINHA_JOGO' },
+            { text: "(SUSPENSO) Assistir o jogo da arquibancada.", requiresFlag: 'skipJogo7', onSelect: (p) => { delete p.flags.skipJogo7; }, nextEvent: 'JOGO_8_PREP_SUSPENSO' } // Evento de suspensão
         ]
     },
     'VARZEA_JULINHA_JOGO': { 
         text: "A semifinal está prestes a começar. Você vê Julinha na arquibancada, rindo e apontando para você com as amigas dela.\n\nEla grita: 'ANDA, [playerName]! FAZ UM GOL PRA MIM!'",
         choices: [
-            { text: "Tentar um drible impossível para se exibir. (Caos)", onSelect: (p) => { p.chaos += 10; p.fame += 5; }, nextEvent: 'JOGO_6_EVENTO_SEMIFINAL' },
-            { text: "Ignorar e focar na tática do técnico.", onSelect: (p) => { p.foco += 15; }, nextEvent: 'JOGO_6_EVENTO_SEMIFINAL' }
+            { text: "Tentar um drible impossível para se exibir. (Caos)", onSelect: (p) => { p.chaos += 10; p.fame += 5; }, nextEvent: 'JOGO_7_EVENTO_SEMIFINAL' },
+            { text: "Ignorar e focar na tática do técnico.", onSelect: (p) => { p.foco += 15; }, nextEvent: 'JOGO_7_EVENTO_SEMIFINAL' }
         ]
     },
-    'JOGO_6_EVENTO_SEMIFINAL': {
+    'JOGO_7_EVENTO_SEMIFINAL': {
         text: "Semifinal tensa. 1 a 1, 89 minutos. Você recebe a bola no meio-campo. É você e o último zagueiro do Palmeirinha. A final está nos seus pés.",
         onSelect: (p) => { p.gamesPlayed += 1; }, // Contabiliza Jogo
         choices: [
             { 
                 text: "Partir para o drible! (Tudo ou Nada)", 
-                minigame: { type: 'dribble', onSuccess: 'JOGO_6_VITORIA', onFail: 'JOGO_6_DERROTA' }
+                minigame: { type: 'dribble', onSuccess: 'JOGO_7_VITORIA', onFail: 'JOGO_7_DERROTA' }
             },
             { 
                 text: "Tocar para o lado e ir para os pênaltis. (Risco)", 
                 onSelect: (p) => { p.chaos -= 5; }, 
-                nextEvent: 'JOGO_6_PENALTIS' 
+                nextEvent: 'JOGO_7_PENALTIS' 
             }
         ]
     },
-    'JOGO_6_PENALTIS': { 
+    'JOGO_7_PENALTIS': { 
         text: "Você tocou de lado. O jogo vai para os pênaltis. O técnico te escolhe como o 5º batedor. A responsabilidade é sua.",
         choices: [
             { 
                 text: "Bater o pênalti decisivo.", 
-                minigame: { type: 'penalty', onSuccess: 'JOGO_6_VITORIA', onFail: 'JOGO_6_DERROTA' }
+                minigame: { type: 'penalty', onSuccess: 'JOGO_7_VITORIA', onFail: 'JOGO_7_DERROTA' }
             }
         ]
     },
-    'JOGO_6_VITORIA': { 
+    'JOGO_7_VITORIA': { 
         text: "VOCÊ CONSEGUIU! Seja no drible ou no pênalti, você colocou o [player.team] na GRANDE FINAL da 2ª Divisão!",
         onSelect: (p) => { p.goals += 1; }, // Contabiliza o gol (do drible ou pênalti)
         choices: [
-            // ** ATUALIZAÇÃO DE FLUXO: Leva para o novo Arco do Interclasse **
             { text: "É A FINAL! ...Mas antes...", nextEvent: 'INTERCLASSE_INTRO' }
         ]
     },
-    'JOGO_6_DERROTA': { 
+    'JOGO_7_DERROTA': { 
         text: "Você tentou o drible (ou errou o pênalti) e o zagueiro te desarmou. O juiz apita o fim do jogo. O [player.team] está eliminado na semifinal.\n\nVocê, [playerName], 16 anos, vê seu sonho de subir acabar... por enquanto.",
         choices: [
-            { text: "Fim da temporada...", nextEvent: 'VARZEA_CHURRASCO_TIME' } 
+            // ** ATUALIZAÇÃO DE FLUXO: Seta flag de derrota e vai pro Interclasse **
+            { text: "Fim da temporada da Várzea... Mas ainda tem o Interclasse.", onSelect: (p) => { p.flags.derrotaSemifinal = true; }, nextEvent: 'INTERCLASSE_INTRO' } 
         ]
     },
-    // Fim do Jogo 6 (Suspenso)
-    'JOGO_7_PREP_SUSPENSO': {
-        text: "Você voltou da suspensão de 2 jogos. Seu time ([player.team]) foi eliminado na semifinal (Jogo 6) enquanto você estava fora. Você está com fama de 'bad boy'.\n\nAmanda te ignora na escola. Marcos te chama de 'esquentadinho'.",
+    // Fim do Jogo 7 (Suspenso)
+    'JOGO_8_PREP_SUSPENSO': {
+        text: "Você voltou da suspensão de 2 jogos. Seu time ([player.team]) foi eliminado na semifinal (Jogo 7) enquanto você estava fora. Você está com fama de 'bad boy'.\n\nAmanda te ignora na escola. Marcos te chama de 'esquentadinho'.",
         choices: [
-            { text: "Preciso recomeçar...", nextEvent: 'FIM_TEMPORADA_VARZEA' }
+            // ** ATUALIZAÇÃO DE FLUXO: Seta flag de derrota e vai pro Interclasse **
+            { text: "Preciso recomeçar... Pelo menos no Interclasse.", onSelect: (p) => { p.flags.derrotaSemifinal = true; }, nextEvent: 'INTERCLASSE_INTRO' }
         ]
     },
-    
-    // --- NOVO ARCO: INTERCLASSE ETEC ---
+
+    // --- ARCO: INTERCLASSE ETEC ---
     'INTERCLASSE_INTRO': {
-        text: "Você classificou o [player.team] para a final! Mas a comemoração dura pouco. Na segunda-feira, a Professora Cássia anuncia: 'Atenção, turma. Começou o Interclasse. O 2° Informática (sua sala) joga hoje nas Oitavas.'\n\nSeu amigo te cutuca: 'Fudeu, é contra o 2° TS.'",
+        text: "Apesar do resultado na Várzea, a vida escolar continua. A Professora Cássia anuncia: 'Atenção, turma. Começou o Interclasse. O 2° Informática (sua sala) joga hoje nas Oitavas.'\n\nSeu amigo te cutuca: 'Fudeu, é contra o 2° TS (T.S.I.).'",
         choices: [
-            { text: "Oitavas? Hoje? Não posso me machucar.", nextEvent: 'INTERCLASSE_OITAVAS_TS' }
+            { text: "Oitavas? Hoje? Vamos pra cima.", nextEvent: 'INTERCLASSE_OITAVAS_TS' }
         ]
     },
     'INTERCLASSE_OITAVAS_TS': {
-        text: "Oitavas de Final: 2° Info vs. 2° TS. Os caras são enormes e só sabem bater. O jogo é na quadra. A bola é pesada. Eles dão carrinho, puxão... O juiz é o professor de Ed. Física, que não marca nada. Mas você é [playerPos].",
-        onSelect: (p) => { p.gamesPlayed += 1; },
+        text: "Oitavas de Final: 2° Info vs. 2° TS. Os caras são enormes e só sabem bater. O jogo é na quadra. A bola é pesada. Eles dão carrinho, puxão... O juiz é o professor de Ed. Física, que não marca nada.\n\nSeu time (2° Info) é: Você (10), Lucas (5), 'Nerdola' (Goleiro), 'Pro-Player do CS' (7) e 'Gordão da Lanchonete' (9).\n\nO que você faz?",
+        // ** Stats do Interclasse não contam para a Várzea (p.goals, p.gamesPlayed, p.assists removidos) **
         choices: [
-            { text: "Humilhar com dribles e futebol bonito. (Fama)", onSelect: (p) => { p.fame += 10; p.skill += 1; p.goals += 2; }, nextEvent: 'INTERCLASSE_QUARTAS_LING' },
-            { text: "Evitar a bola e não se machucar para a Final. (Foco)", onSelect: (p) => { p.foco += 10; p.chaos -= 5; }, nextEvent: 'INTERCLASSE_QUARTAS_LING' },
-            { text: "Bater de volta. (Caos)", onSelect: (p) => { p.chaos += 10; p.foco -= 10; p.yellowCards += 1; }, nextEvent: 'INTERCLASSE_QUARTAS_LING' }
+            { text: "Tática: Tocar pro 'Pro-Player' (7) e deixar ele tentar a skill.", onSelect: (p) => { p.fame += 5; p.skill += 1; }, nextEvent: 'INTERCLASSE_QUARTAS_LING' },
+            { text: "Tática: Tentar a jogada individual e humilhar. (Você, 10)", onSelect: (p) => { p.fame += 10; p.skill += 1; }, nextEvent: 'INTERCLASSE_QUARTAS_LING' },
+            { text: "Tática: Tocar pro 'Gordão' (9) fazer o pivô e bater de volta. (Caos)", onSelect: (p) => { p.chaos += 10; p.foco -= 5; }, nextEvent: 'INTERCLASSE_QUARTAS_LING' }
         ]
     },
     'INTERCLASSE_QUARTAS_LING': {
-        text: "Quartas de Final: 2° Info vs. 2° Linguagens. É a sala da Amanda. O jogo começa e você percebe algo estranho: a sala inteira dela está te vaiando. Amanda nem olha na sua cara. 'Mercenário!', grita um. 'Se acha o rei!', grita outro.",
-        onSelect: (p) => { p.gamesPlayed += 1; },
+        text: "Quartas de Final: 2° Info vs. 2° Linguagens (Sala da Amanda). O jogo começa e você percebe algo estranho: a sala inteira dela está te vaiando. Amanda nem olha na sua cara. 'Mercenário!', grita um. 'Se acha o rei!', grita outro.\n\nO jogo está 0-0, tenso.",
         choices: [
-            { text: "Ignorar. Fazer 3 gols e calar a boca deles. (Foco)", onSelect: (p) => { p.skill += 1; p.foco += 10; p.goals += 3; }, nextEvent: 'INTERCLASSE_SEMI_RH' },
-            { text: "Ir tirar satisfação com Amanda no intervalo. (Caos)", onSelect: (p, N) => { p.chaos += 10; N.amanda.affinity -= 15; }, nextEvent: 'INTERCLASSE_SEMI_RH' },
-            { text: "Fazer um gol e mandar a torcida 'calar a boca'. (Fama/Caos)", onSelect: (p) => { p.fame += 5; p.chaos += 5; p.goals += 1; }, nextEvent: 'INTERCLASSE_SEMI_RH' }
+            { text: "Jogar com raiva. Chutar de qualquer lugar. (Caos)", onSelect: (p) => { p.chaos += 5; }, nextEvent: 'INTERCLASSE_SEMI_RH' },
+            { text: "Tabelar com Lucas (5) e jogar bonito. (Foco)", onSelect: (p, N) => { p.skill += 1; p.foco += 10; N.amanda.affinity -= 5; }, nextEvent: 'INTERCLASSE_SEMI_RH' },
+            { text: "Fazer um gol e mandar a torcida 'calar a boca'. (Fama/Caos)", onSelect: (p, N) => { p.fame += 5; p.chaos += 5; N.amanda.affinity -= 10; }, nextEvent: 'INTERCLASSE_SEMI_RH' }
         ]
     },
     'INTERCLASSE_SEMI_RH': {
         text: "Semifinal: 2° Info vs. 3° RH. A sala das meninas mais famosas (e bonitas) da ETEC. Elas estão na arquibancada com cartazes com seu nome. 'GATO!', 'CASA COMIGO [playerName]!'.\n\nJulinha e Amanda assistem de longe, com raiva.",
-        onSelect: (p) => { p.gamesPlayed += 1; },
         choices: [
-            { text: "Dar um show. Dribles, chapéus e 2 gols. (Fama)", onSelect: (p, N) => { p.fame += 20; p.followers += 500; p.skill += 1; p.goals += 2; N.amanda.affinity -= 5; N.julinha.affinity += 5; }, unlocksPost: 'post_amanda_ciumes', nextEvent: 'INTERCLASSE_FINAL_ADM' },
-            { text: "Jogar sério e focar na final. (Foco)", onSelect: (p) => { p.foco += 10; p.goals += 1; }, nextEvent: 'INTERCLASSE_FINAL_ADM' }
+            { text: "Dar um show. Dribles, chapéus e 2 gols. (Fama)", onSelect: (p, N) => { p.fame += 20; p.followers += 500; p.skill += 1; N.amanda.affinity -= 5; N.julinha.affinity += 5; }, unlocksPost: 'post_amanda_ciumes', nextEvent: 'INTERCLASSE_FINAL_ADM' },
+            { text: "Jogar sério e focar na final. (Foco)", onSelect: (p) => { p.foco += 10; }, nextEvent: 'INTERCLASSE_FINAL_ADM' }
         ]
     },
     'INTERCLASSE_FINAL_ADM': {
         text: "A GRANDE FINAL do Interclasse: 2° Info vs. 2° ADM. O ginásio está lotado. O 2° ADM tem o 'melhor aluno' (um tal de Renan) e TRÊS PROFESSORES jogando com eles (Contabilidade, Gestão e Ética). É uma 'panela' clara.\n\nRenan te provoca: 'Aqui não é terrão, [playerPos]. Vai chorar?'",
-        onSelect: (p) => { p.gamesPlayed += 1; },
         choices: [
             { text: "Responder: 'Nem com professor vocês ganham.' (Caos)", onSelect: (p, N) => { p.chaos += 5; N.profCassia.patience -= 5; }, nextEvent: 'INTERCLASSE_FINAL_JOGO' },
             { text: "Ignorar e ir pro jogo. (Foco)", onSelect: (p) => { p.foco += 10; }, nextEvent: 'INTERCLASSE_FINAL_JOGO' }
@@ -936,10 +1040,10 @@ export const gameEvents = {
         text: "GOOOOOL! Na gaveta! Você calou o ginásio! Você venceu a 'panela' dos professores e do 2° ADM! Sua sala invade a quadra! Você é, oficialmente, O REI DA ETEC!",
         choices: [
             { 
-                text: "Levantar o troféu! (Agora foco na Várzea)", 
-                onSelect: (p) => { p.fame += 50; p.followers += 1000; p.skill += 2; p.goals += 1; }, 
-                unlocksPost: 'post_julinha_provoca_1', // Julinha provoca para a final da Várzea
-                nextEvent: 'FINAL_2DIV_PREP' 
+                text: "Levantar o troféu!", 
+                onSelect: (p) => { p.fame += 50; p.followers += 1000; p.skill += 2; }, 
+                unlocksPost: 'post_interclasse_campeao',
+                nextEvent: 'POS_INTERCLASSE_HUB'
             }
         ]
     },
@@ -947,17 +1051,46 @@ export const gameEvents = {
         text: "Você errou. O juiz apita. A 'panela' do 2° ADM vence. Renan tira sarro da sua cara. 'Faltou campinho de terra, né?'\n\nVocê perdeu, mas todos viram que foi roubado.",
         choices: [
             { 
-                text: "Ir para o vestiário. (Foco na Várzea)", 
+                text: "Ir para o vestiário...", 
                 onSelect: (p) => { p.chaos += 10; p.fame += 10; }, 
-                unlocksPost: 'post_julinha_provoca_1', // Julinha provoca para a final da Várzea
-                nextEvent: 'FINAL_2DIV_PREP' 
+                unlocksPost: 'post_interclasse_renan',
+                nextEvent: 'POS_INTERCLASSE_HUB'
             }
+        ]
+    },
+
+    // --- PÓS-INTERCLASSE (Roteador para Várzea) ---
+    // ** CORREÇÃO DE FLUXO **
+    'POS_INTERCLASSE_HUB': {
+        text: "A poeira do Interclasse baixou. Agora, resta o destino do campeonato da Várzea...",
+        choices: [
+            // Se o jogador foi eliminado (Flag 'derrotaSemifinal' foi setada em JOGO_7_DERROTA ou JOGO_8_PREP_SUSPENSO)
+            { 
+                text: "Pelo menos o Interclasse foi louco... (Fim da Temporada)", 
+                condition: (p) => p.flags.derrotaSemifinal === true, 
+                nextEvent: 'VARZEA_CHURRASCO_TIME' 
+            },
+            // Se o jogador está na final (Flag NÃO existe)
+            { 
+                text: "Ganhei (ou perdi) o Interclasse. Agora quero a Final da Várzea.", 
+                condition: (p) => !p.flags.derrotaSemifinal, 
+                nextEvent: 'EVENTO_JULINHA_APOSTA' 
+            }
+        ]
+    },
+
+    // --- Aposta da Julinha ---
+    'EVENTO_JULINHA_APOSTA': {
+        text: "É a véspera da FINAL da Várzea. Você está na praça. Julinha (do Bala de Prata, o time rival) senta ao seu lado.\n\n'E aí, Rei da ETEC. Tá se achando, né? Tão confiante que aposto... se você ganhar amanhã... te dou um beijo.'\n\nEla fala rindo, em tom de deboche total, como se fosse impossível.",
+        choices: [
+            { text: "'Aposta aceita. Prepara o batom.' (Caos)", onSelect: (p) => { p.chaos += 5; p.flags.apostaJulinha = true; }, nextEvent: 'FINAL_2DIV_PREP' },
+            { text: "'Não preciso de aposta. Vou ganhar de qualquer jeito.' (Foco)", onSelect: (p) => { p.foco += 5; }, nextEvent: 'FINAL_2DIV_PREP' }
         ]
     },
     
     // --- Final 2ª Divisão ---
     'FINAL_2DIV_PREP': {
-        text: "É a semana da final da VÁRZEA. A cidade não fala de outra coisa. O [player.team] contra o Bala de Prata. Julinha, que viu sua derrota (ou vitória) no Interclasse, passou a semana postando indireta.\n\n'Rei da ETEC? Vamos ver se é rei do Gramadinho.'",
+        text: "É a semana da final da VÁRZEA. A cidade não fala de outra coisa. O [player.team] contra o Bala de Prata. Julinha (caso não tenha falado com você) passou a semana postando indireta.\n\n'Rei da ETEC? Vamos ver se é rei do Gramadinho.'",
         choices: [
             { text: "Treinar focado, ignorar provocações.", onSelect: (p) => { p.foco += 30; p.skill += 1; }, nextEvent: 'FINAL_2DIV_EVENTO' },
             { text: "Responder a provocação no InstaVárzea.", onSelect: (p) => { p.chaos += 5; p.fame += 5; p.foco -= 10; }, unlocksPost: 'post_player_foco_1', nextEvent: 'FINAL_2DIV_EVENTO' }
@@ -979,23 +1112,60 @@ export const gameEvents = {
         ]
     },
     'FINAL_2DIV_CAMPEAO': {
-        text: "GOOOOOOOOOOOL! NO ÂNGULO! O [player.team] É CAMPEÃO DA 2ª DIVISÃO! Você é o herói! A torcida invade o campo! Julinha te olha com raiva (ou admiração?).",
+        text: "GOOOOOOOOOOOL! NO ÂNGULO! O [player.team] É CAMPEÃO DA 2ª DIVISÃO! Você é o herói! A torcida invade o campo! Julinha te olha da arquibancada, chocada.\n\n(Se você apostou, você pisca para ela, lembrando da aposta.)",
         choices: [
             { 
                 text: "CAMPEÃO!", 
                 onSelect: (p) => { p.fame += 50; p.skill += 3; p.followers += 2000; p.goals += 1; if (p.team === "Calcário EC") { p.money += 200; } }, 
                 unlocksPost: 'post_final_2div_campeao', 
-                nextEvent: 'FIM_TEMPORADA_VARZEA' 
+                nextEvent: 'EVENTO_POS_FINAL_HUB' // Roteador da Aposta
             }
         ]
     },
     'FINAL_2DIV_VICE': {
-        text: "NA TRAVE! (Ou o capitão errou). O juiz apita o fim do jogo. O Bala de Prata é campeão. Julinha comemora na sua cara. Você é o vice.",
+        text: "NA TRAVE! (Ou o capitão errou). O juiz apita o fim do jogo. O Bala de Prata é campeão. Julinha comemora na sua cara. 'EU FALEI!', ela grita.",
         choices: [
             { text: "Foi por pouco...", onSelect: (p) => { p.chaos += 10; p.fame += 10; }, nextEvent: 'VARZEA_CHURRASCO_TIME' }
         ]
     },
     
+    // --- NOVO ROTEADOR PÓS-FINAL (Para Aposta) ---
+    'EVENTO_POS_FINAL_HUB': {
+        text: "A festa do título está rolando no campo...",
+        choices: [
+            { 
+                text: "(Julinha se aproxima...)", 
+                condition: (p) => p.flags.apostaJulinha === true, 
+                nextEvent: 'EVENTO_JULINHA_BEIJO_APOSTA' 
+            },
+            { 
+                text: "(Ir comemorar com o time)", 
+                condition: (p) => !p.flags.apostaJulinha, 
+                nextEvent: 'FIM_TEMPORADA_VARZEA' 
+            }
+        ]
+    },
+    'EVENTO_JULINHA_BEIJO_APOSTA': {
+        text: "No meio da festa, Julinha te puxa para trás da arquibancada. Ela está furiosa, mas com um sorriso de canto de boca. 'Droga, [playerName]. Você conseguiu.'\n\n'Uma aposta é uma aposta.'\n\nEla te puxa pela nuca e te dá um beijo.",
+        choices: [
+            { text: "'(Risos) Beijo bom é beijo de rival.' (Caos)", onSelect: (p, N) => { p.fame += 10; p.chaos += 5; N.julinha.affinity += 15; }, nextEvent: 'EVENTO_JULINHA_BEIJO_RESPOSTA' },
+            { text: "'Só isso?' (Fama)", onSelect: (p, N) => { p.fame += 5; N.julinha.affinity += 5; }, nextEvent: 'EVENTO_JULINHA_BEIJO_APOSTA_2' },
+            { text: "'...Obrigado.' (Foco)", onSelect: (p, N) => { p.foco += 5; N.julinha.affinity += 10; }, nextEvent: 'EVENTO_JULINHA_BEIJO_APOSTA_2' }
+        ]
+    },
+    'EVENTO_JULINHA_BEIJO_RESPOSTA': {
+        text: "Julinha ri. 'Você é um idiota.' Ela te puxa e te beija de novo, mais demorado.\n\nQuando ela se afasta, ela te dá um empurrão leve. 'Mas foi pura sorte. Ano que vem o Bala de Prata te pega na 1ª Divisão!'",
+        choices: [
+            { text: "'Estarei esperando.'", unlocksPost: 'post_julinha_beijo', nextEvent: 'FIM_TEMPORADA_VARZEA' }
+        ]
+    },
+    'EVENTO_JULINHA_BEIJO_APOSTA_2': {
+        text: "Julinha revira os olhos. 'Não se acostuma, Rei da ETEC.'\n\nEla se vira e vai embora, mas você nota ela olhando para trás uma última vez antes de sumir na multidão.",
+        choices: [
+            { text: "...", unlocksPost: 'post_julinha_beijo', nextEvent: 'FIM_TEMPORADA_VARZEA' }
+        ]
+    },
+
     // --- Fim de Temporada (Rota A) ---
     'VARZEA_CHURRASCO_TIME': { 
         text: "Apesar da derrota (ou mesmo com a vitória), o time se reúne para o churrasco de fim de temporada. A cerveja está rolando e o som está alto.\n\n'Não foi dessa vez, [playerName], mas você jogou muito' (se perdeu) ou 'É CAMPEÃO!' (se ganhou).",

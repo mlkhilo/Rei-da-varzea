@@ -14,15 +14,11 @@ export const allSocialPosts = {
         body: 'Futebol se resolve no campo. Moleque sortudo. Semana que vem tem troco. 😡',
         likes: 45
     },
-    
-    // ** MODIFICAÇÃO: Post antigo da briga substituído pelo novo **
     'post_briga_marcos_amigos': {
         author: 'Rádio Várzea (Gordão)',
         body: 'NEM EM FESTA! 🥊 O "amistoso da paz" entre Amigos do [player.team] e Amigos do CAI terminou em pancadaria! [playerName] e Marcos saíram na mão de novo! INACREDITÁVEL!',
         likes: 150
     },
-
-    // NOVO POST DA BRIGA DO AMISTOSO
     'post_briga_jamaica': {
         author: 'Rádio Várzea (Gordão)',
         body: 'QUEBRAM O PAU! 🥊 O amistoso do [player.team] contra o Jamaica Itapê terminou em briga generalizada! [playerName] foi o pivô! VERGONHA!',
@@ -48,14 +44,13 @@ export const allSocialPosts = {
         body: 'CAMPEÃO! 🏆 O [player.team] choca a todos e vence a Final da 2ª Divisão! [playerName] foi o craque do campeonato!',
         likes: 450
     },
-    // --- (NOVOS POSTS V7.0) ---
     'post_cema_anuncio': {
         author: 'CEMA FC (Oficial)',
         body: 'REFORÇO DE PESO! 🏆 O [playerPos] [playerName] é o novo contratado do CEMA para a final do Municipal. Bem-vindo, craque!',
         likes: 320
     },
     'post_player_foco_1': {
-        author: '[playerName]', // O nome do jogador será inserido aqui
+        author: '[playerName]', 
         body: 'Focado 100% no próximo jogo. O trabalho não para. 🙏⚽',
         likes: 150
     },
@@ -74,7 +69,6 @@ export const allSocialPosts = {
         body: 'Acharam que iam subir fácil? A final vai ter dona. E não vai ser o [player.team]. 💅',
         likes: 180
     },
-    // --- (POSTS DA ATUALIZAÇÃO ANTERIOR) ---
     'post_matar_aula_amanda': {
         author: 'Amanda Carolina',
         body: 'Açaí com o melhor [playerPos] de Itapê... 🤫❤️',
@@ -99,5 +93,37 @@ export const allSocialPosts = {
         author: 'Amanda Carolina',
         body: 'Selfie no corredor com o [playerPos] mais gato da ETEC! ❤️ Meu jogador!',
         likes: 350
+    },
+
+    // --- NOVOS POSTS ---
+    'post_aguia_assist_lucas': {
+        author: 'Várzea Itapê (Admin)',
+        body: 'QUE VISÃO! 🎯 [playerName] ignora a fama, vê Lucas Lino livre e dá uma assistência de craque no jogo contra o Águia Paulista. Joga fácil!',
+        likes: 330
+    },
+    'post_interclasse_campeao': {
+        author: '[playerName]',
+        body: 'REI DA ETEC! 👑🏆 O 2° de Informática calou os críticos (e os professores do ADM). Obrigado, time! (Nerdola, Pro-Player, Gordão e Lucas!)',
+        likes: 620
+    },
+    'post_interclasse_renan': {
+        author: 'Renan (2° ADM)',
+        body: 'Interclasse ROUBADO! O juiz operou a gente. O [playerPos] do 2° Info só sabe jogar no terrão. Ano que vem tem troco!',
+        likes: 25
+    },
+    'post_nerd_zoeira': {
+        author: 'Capitão ETEC',
+        body: 'KKKKKK o [playerName] viu o Nerdola tomar o capote e ainda chutou o livro dele. Esse é dos meus! #Resenha',
+        likes: 90
+    },
+    'post_julinha_niver': {
+        author: 'Julinha (Bala de Prata)',
+        body: 'Niver foi SENSACIONAL! 💥 Obrigada a todos que vieram! (Até os rivais... 😜)',
+        likes: 410
+    },
+    'post_julinha_beijo': {
+        author: 'Julinha (Bala de Prata)',
+        body: 'Não acredito que perdi a aposta... 🙄 Mas pelo menos... ah, deixa quieto. 🤫',
+        likes: 550
     }
 };
