@@ -14,12 +14,20 @@ let player = {
     followers: 50,
     metDjalma: false, // Controle de loop da história
     flags: {}, // Controle de eventos
-    // NOVAS ESTATÍSTICAS DE CARREIRA
+    style: "Padrão", // Novo status para corte de cabelo
+    // ESTATÍSTICAS DE CARREIRA (VÁRZEA)
     gamesPlayed: 0,
     goals: 0,
     assists: 0,
     yellowCards: 0,
-    redCards: 0
+    redCards: 0,
+    // ESTATÍSTICAS DO INTERCLASSE (Separado)
+    interclasse: {
+        games: 0,
+        goals: 0,
+        assists: 0,
+        teamName: "2° Info"
+    }
 };
 
 let NPCs = { 
@@ -27,7 +35,12 @@ let NPCs = {
     marcos: { followers: 150 },
     julinha: { followers: 2100, affinity: 0 },
     lucas: { followers: 80, affinity: 0 }, 
-    profCassia: { patience: 100 } 
+    profCassia: { patience: 100 },
+    // --- NOVOS NPCs ---
+    mateus: { followers: 250, affinity: 0, chaos: 10 },
+    caua: { followers: 120, affinity: 5, foco: 10 },
+    julioCisterna: { followers: 400, affinity: 0, rivalry: 0 },
+    diretor: { patience: 100 }
 };
 
 let socialFeedLog = []; 
@@ -57,12 +70,15 @@ DOM.setupForm.addEventListener('submit', (e) => {
     player.foco = 80;
     player.metDjalma = false;
     player.flags = {}; 
+    player.style = "Padrão";
     // RESET DAS ESTATÍSTICAS DE CARREIRA
     player.gamesPlayed = 0;
     player.goals = 0;
     player.assists = 0;
     player.yellowCards = 0;
     player.redCards = 0;
+    // RESET INTERCLASSE
+    player.interclasse = { games: 0, goals: 0, assists: 0, teamName: "2° Info" };
     
     // Reset NPCs
     NPCs.amanda.followers = 4500;
@@ -73,6 +89,11 @@ DOM.setupForm.addEventListener('submit', (e) => {
     NPCs.lucas.followers = 80; 
     NPCs.lucas.affinity = 0;
     NPCs.profCassia.patience = 100;
+    // RESET NOVOS NPCs
+    NPCs.mateus = { followers: 250, affinity: 0, chaos: 10 };
+    NPCs.caua = { followers: 120, affinity: 5, foco: 10 };
+    NPCs.julioCisterna = { followers: 400, affinity: 0, rivalry: 0 };
+    NPCs.diretor = { patience: 100 };
     
     socialFeedLog = []; // Limpa o feed
 
@@ -89,11 +110,17 @@ function showEvent(eventId) {
     if (player.foco > 100) player.foco = 100;
     if (player.foco < 0) player.foco = 0;
     if (NPCs.profCassia.patience > 100) NPCs.profCassia.patience = 100;
+    if (NPCs.diretor.patience > 100) NPCs.diretor.patience = 100;
+
 
     // Checagem de Game Over da Professora Cássia
-    // ** ISSO PEGA O JOGADOR DE SURPRESA ANTES DO EVENTO CARREGAR **
     if (NPCs.profCassia.patience <= 0) {
         showEvent('GAME_OVER_CASSIA');
+        return;
+    }
+    // Checagem de Game Over do Diretor
+    if (NPCs.diretor.patience <= 0) {
+        showEvent('GAME_OVER_DIRETOR');
         return;
     }
 
@@ -113,7 +140,8 @@ function showEvent(eventId) {
         .replace(/\[player.team\]/g, player.team)
         .replace(/\[player.money\]/g, player.money) 
         .replace(/\[player.foco\]/g, player.foco) 
-        .replace(/\[profCassia.patience\]/g, NPCs.profCassia.patience);
+        .replace(/\[profCassia.patience\]/g, NPCs.profCassia.patience)
+        .replace(/\[diretor.patience\]/g, NPCs.diretor.patience);
     
     DOM.storyTextElement.innerText = storyText;
     DOM.choiceAreaElement.innerHTML = '';
@@ -125,12 +153,10 @@ function showEvent(eventId) {
             return; 
         }
         
-        // Checagem de flag (para não repetir evento ou pular)
-        // 'requiresFlag' significa: SÓ mostre se a flag existir
+        // Checagem de flag
         if (choice.requiresFlag && !player.flags[choice.requiresFlag]) {
              return;
         }
-        // 'skipIfFlag' significa: NÃO mostre se a flag existir
         if (choice.skipIfFlag && player.flags[choice.skipIfFlag]) {
              return;
         }
@@ -138,14 +164,11 @@ function showEvent(eventId) {
         const button = document.createElement('button');
         button.classList.add('choice-button');
         
-        // Substitui placeholders nas escolhas
-        button.innerText = choice.text
-            .replace(/\[player.money\]/g, player.money);
+        button.innerText = choice.text.replace(/\[player.money\]/g, player.money);
 
         
         if (choice.minigame) {
             button.addEventListener('click', () => {
-                // Roda o onSelect da escolha ANTES do minigame (se houver)
                 if (choice.onSelect) {
                     choice.onSelect(player, NPCs);
                 }
@@ -164,7 +187,6 @@ function showEvent(eventId) {
 
 // Função chamada quando o jogador clica em um botão
 function selectChoice(choice) {
-    // Desbloqueia posts nas redes sociais
     if (choice.unlocksPost) {
         if (!socialFeedLog.includes(choice.unlocksPost)) {
             socialFeedLog.push(choice.unlocksPost);
@@ -355,32 +377,27 @@ DOM.socialCloseBtn.addEventListener('click', () => {
     DOM.socialModal.close();
 });
 
-// ** MODIFICAÇÃO: Lógica do InstaVárzea atualizada para o formato "clicável" **
+// Lógica do InstaVárzea (clicável)
 function renderSocialFeed() {
-    // 1. Atualiza contagem de seguidores
     DOM.followerCountsDisplay.innerHTML = `
         <span>Você: <b id="p-followers">${player.followers}</b></span>
         <span>Amanda: <b id="a-followers">${NPCs.amanda.followers}</b></span>
-        <span>Marcos: <b id="m-followers">${NPCs.marcos.followers}</b></span>
         <span>Julinha: <b id="j-followers">${NPCs.julinha.followers}</b></span>
-        <span>Lucas: <b id="l-followers">${NPCs.lucas.followers}</b></span>
+        <span>Mateus: <b id="m-followers">${NPCs.mateus.followers}</b></span>
+        <span>Cauã: <b id="c-followers">${NPCs.caua.followers}</b></span>
     `; 
 
-    // 2. Limpa o feed antigo
     DOM.socialFeedContent.innerHTML = '';
 
-    // 3. Checa se há posts
     if (socialFeedLog.length === 0) {
         DOM.socialFeedContent.innerHTML = "<p style='padding: 20px; text-align: center;'>Nada novo por aqui...</p>";
         return;
     }
 
-    // 4. Renderiza os posts desbloqueados
     socialFeedLog.forEach(postId => {
         const postData = allSocialPosts[postId];
         if (postData) {
-            // Substitui placeholders nos posts
-            const postAuthor = postData.author.replace(/\[playerName\]/g, player.name); // Para posts do jogador
+            const postAuthor = postData.author.replace(/\[playerName\]/g, player.name);
             const postBody = postData.body
                 .replace(/\[playerName\]/g, player.name)
                 .replace(/\[player.team\]/g, player.team)
@@ -400,7 +417,6 @@ function renderSocialFeed() {
                 <div class="post-footer">${postData.likes} curtidas</div>
             `;
 
-            // Adiciona o evento de clique no header
             postHeader.addEventListener('click', () => {
                 postContentWrapper.classList.toggle('hidden');
             });
@@ -421,11 +437,13 @@ DOM.careerCloseBtn.addEventListener('click', () => {
     DOM.careerModal.close();
 });
 
-// Nova função para renderizar as estatísticas
+// Atualizado para incluir Stats do Interclasse
 function renderCareerStats() {
     DOM.careerContent.innerHTML = `
         <h3>Estatísticas de ${player.name}</h3>
         <p>Time Atual: <strong>${player.team}</strong></p>
+        
+        <h4>🏆 Carreira na Várzea</h4>
         <ul>
             <li>Jogos Disputados: <strong>${player.gamesPlayed}</strong></li>
             <li>Gols: <strong>${player.goals}</strong></li>
@@ -434,7 +452,11 @@ function renderCareerStats() {
             <li>Cartões Vermelhos: <strong>${player.redCards}</strong></li>
         </ul>
         <hr>
-        <h3>Histórico de Times</h3>
-        <p>(Em breve...)</p>
+        <h4>🏆 Interclasse (${player.interclasse.teamName})</h4>
+        <ul>
+            <li>Jogos: <strong>${player.interclasse.games}</strong></li>
+            <li>Gols: <strong>${player.interclasse.goals}</strong></li>
+            <li>Assistências: <strong>${player.interclasse.assists}</strong></li>
+        </ul>
     `;
 }

@@ -94,8 +94,6 @@ export const allSocialPosts = {
         body: 'Selfie no corredor com o [playerPos] mais gato da ETEC! ❤️ Meu jogador!',
         likes: 350
     },
-
-    // --- NOVOS POSTS ---
     'post_aguia_assist_lucas': {
         author: 'Várzea Itapê (Admin)',
         body: 'QUE VISÃO! 🎯 [playerName] ignora a fama, vê Lucas Lino livre e dá uma assistência de craque no jogo contra o Águia Paulista. Joga fácil!',
@@ -125,5 +123,52 @@ export const allSocialPosts = {
         author: 'Julinha (Bala de Prata)',
         body: 'Não acredito que perdi a aposta... 🙄 Mas pelo menos... ah, deixa quieto. 🤫',
         likes: 550
+    },
+
+    // --- NOVOS POSTS DA ATUALIZAÇÃO ---
+    'post_mateus_caua_resenha': {
+        author: '[playerName]',
+        body: 'Treino de hoje foi resenha KKKK o Mateus [10] foi brincar de lutinha com o Cauã [3] e quase tomou um mata-leão. 🥋 Tamo junto, rapaziada!',
+        likes: 88
+    },
+    'post_juventus_penalty': {
+        author: 'Rádio Várzea (Gordão)',
+        body: 'CLIMA QUENTE! 😡 [playerName] ia bater o pênalti pro [player.team] mas o Mateus [10] pegou a bola, bateu e... ISOLOU! Que marra! O técnico vai ter dor de cabeça.',
+        likes: 210
+    },
+    'post_cabelo_platinado': {
+        author: '[playerName]',
+        body: 'Mudei o visual! ❄️ Platinado, na régua. Pronto pra final!',
+        likes: 415
+    },
+    'post_cabelo_moicano': {
+        author: '[playerName]',
+        body: 'Visual novo! 🚀 Moicano estilo Neymar. Marra pura!',
+        likes: 390
+    },
+    'post_cabelo_calvo': {
+        author: 'Lucas Lino',
+        body: 'Mano... o [playerName] perdeu uma aposta no treino e meteu o "calvão de cria". KKKKKKKKKKKKK',
+        likes: 120
+    },
+    'post_zueira_apagador': {
+        author: 'Amanda Carolina',
+        body: 'Não acredito que o [playerName] tacou o apagador no ventilador KKKKKKK. A Cássia quase infartou. 🤣',
+        likes: 310
+    },
+    'post_diretor_bronca': {
+        author: 'Várzea Itapê (Admin)',
+        body: 'VIROU BAGUNÇA? 🧐 [playerName] foi visto na sala do Diretor Adalberto hoje. Dizem que a Cássia não aguentou a zueira. Vai dar ruim...',
+        likes: 175
+    },
+    'post_julio_cisterna_festa': {
+        author: 'Julinha (Bala de Prata)',
+        body: 'Meu irmão [Julio Cisterna] colou no meu niver e já ficou de olho nos "craques" da 2ª Divisão. Cuidado, [playerName]... 😜',
+        likes: 430
+    },
+    'post_ressak_vitoria': {
+        author: 'Várzea Itapê (Admin)',
+        body: 'CLASSIFICADO! 🏆 O [player.team] passou fácil pelo Ressak nas Oitavas. Destaque pra [playerName] e Mateus que tão começando a se entender.',
+        likes: 290
     }
 };
